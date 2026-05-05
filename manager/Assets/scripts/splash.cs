@@ -2,18 +2,13 @@ using UnityEngine;
 
 public class SplashController : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
-        Debug.Log("Splash começou");
-
-        Invoke("IrParaMenu", 2f);
+        Invoke("IrParaMenu", 2f); // espera 2 segundos
     }
 
     void IrParaMenu()
     {
-        Debug.Log("Indo para Menu");
-
-        GameManager.Instance.ChangeState(GameManager.GameState.MenuPrincipal);
         GameManager.Instance.LoadScene("MenuPrincipal");
     }
 }

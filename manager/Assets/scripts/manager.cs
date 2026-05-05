@@ -28,6 +28,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     void Start()
     {
         ChangeState(GameState.Iniciando);
@@ -56,6 +66,17 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("Troca de cena bloqueada no estado: " + currentState);
+        }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("Cena carregada: " + scene.name);
+
+        if (scene.name == "MenuPrincipal")
+        {
+            Debug.Log("Menu Principal carregado!");
+            ChangeState(GameState.MenuPrincipal);
         }
     }
 }
