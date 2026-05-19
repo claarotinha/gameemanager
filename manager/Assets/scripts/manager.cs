@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,9 +13,9 @@ public class GameManager : MonoBehaviour
         Gameplay
     }
 
-    public GameState currentState;
+    public GameState CurrentState;
 
-    void Awake()
+    private void Awake()
     {
         // Singleton
         if (Instance == null)
@@ -28,55 +29,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnEnable()
+    private void Start()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SetState(GameState.Iniciando);
+        LoadScene("Splash");
     }
 
-    void OnDisable()
+    public void SetState(GameState newState)
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        CurrentState = newState;
+        Debug.Log("Estado atual: " + newState);
     }
 
-    void Start()
-    {
-        ChangeState(GameState.Iniciando);
-
-        Debug.Log("Carregando Splash...");
-        LoadScene("Splash"); // começa indo pra Splash
-    }
-
-    public void ChangeState(GameState newState)
-    {
-        currentState = newState;
-        Debug.Log("Estado atual: " + currentState);
-    }
-
-    // SÓ o GameManager troca cena
     public void LoadScene(string sceneName)
     {
-        Debug.Log("Tentando carregar: " + sceneName);
+        SceneManager.LoadScene(sceneName);
 
-        if (currentState == GameState.Iniciando ||
-            currentState == GameState.MenuPrincipal ||
-            currentState == GameState.Gameplay)
+        // Define estado baseado na cena
+        switch (sceneName)
         {
-            SceneManager.LoadScene(sceneName);
-        }
-        else
-        {
-            Debug.Log("Troca de cena bloqueada no estado: " + currentState);
+            case "MenuPrincipal":
+                SetState(GameState.MenuPrincipal);
+                break;
+
+            case "SampleScene":
+                SetState(GameState.Gameplay);
+                break;
         }
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void QuitGame()
     {
-        Debug.Log("Cena carregada: " + scene.name);
-
-        if (scene.name == "MenuPrincipal")
-        {
-            Debug.Log("Menu Principal carregado!");
-            ChangeState(GameState.MenuPrincipal);
-        }
+        Debug.Log("Saindo do jogo...");
+        Application.Quit();
     }
 }

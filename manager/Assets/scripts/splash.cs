@@ -1,14 +1,16 @@
 using UnityEngine;
+using System.Collections;
 
 public class SplashController : MonoBehaviour
 {
     private void Start()
     {
-        Invoke("IrParaMenu", 2f); // espera 2 segundos
+        StartCoroutine(SplashRoutine());
     }
 
-    void IrParaMenu()
+    IEnumerator SplashRoutine()
     {
+        yield return new WaitForSeconds(2f);
         GameManager.Instance.LoadScene("MenuPrincipal");
     }
 }
