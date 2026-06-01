@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton
         if (Instance == null)
         {
             Instance = this;
@@ -45,7 +44,6 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
 
-        // Define estado baseado na cena
         switch (sceneName)
         {
             case "MenuPrincipal":
@@ -54,6 +52,12 @@ public class GameManager : MonoBehaviour
 
             case "SampleScene":
                 SetState(GameState.Gameplay);
+
+                // Carrega a cena GUI junto da Gameplay
+                SceneManager.LoadScene("GUI", LoadSceneMode.Additive);
+
+                Debug.Log("Gameplay carregada");
+                Debug.Log("GUI carregada");
                 break;
         }
     }
