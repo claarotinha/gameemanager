@@ -4,7 +4,17 @@ public class PlayerCoins : MonoBehaviour
 {
     private int coins;
 
-    public void CollectCoin()
+    private void OnEnable()
+    {
+        PlayerObserverManager.OnCoinCollected += CollectCoin;
+    }
+
+    private void OnDisable()
+    {
+        PlayerObserverManager.OnCoinCollected -= CollectCoin;
+    }
+
+    private void CollectCoin()
     {
         coins++;
 
