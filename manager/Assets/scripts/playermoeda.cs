@@ -7,40 +7,30 @@ public class PlayerCoins : MonoBehaviour
 
     [SerializeField] private int maxCoins = 5;
 
-
     private int coins;
 
     private BolinhaController bolinhaController;
 
-
     private void Awake()
     {
-        bolinhaController =
-            GetComponent<BolinhaController>();
+        bolinhaController = GetComponent<BolinhaController>();
     }
-
 
     public void CollectCoin()
     {
-        if(coins >= maxCoins)
+        if (coins >= maxCoins)
             return;
-
 
         coins++;
 
-
-        if(bolinhaController != null)
+        if (bolinhaController != null)
         {
             bolinhaController.AddCoinBonus();
         }
 
-
-        PlayerObserverManager.NotifyCoinChanged(
-            playerID,
-            coins
-        );
+        PlayerObserverManager.NotifyCoinCollected();
+        PlayerObserverManager.NotifyCoinChanged(playerID, coins);
     }
-
 
     public int GetCoins()
     {
