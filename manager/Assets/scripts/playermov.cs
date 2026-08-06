@@ -1,28 +1,52 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 5f;
-
     private Rigidbody rb;
-    private Vector3 movement;
 
-    private void Start()
+    private Vector2 moveInput;
+
+    private BolinhaController bolinha;
+
+
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        bolinha = GetComponent<BolinhaController>();
     }
 
-    private void Update()
+
+    public void OnMove(InputAction.CallbackContext context)
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        moveInput = context.ReadValue<Vector2>();
 
-        movement = new Vector3(horizontal, 0f, vertical);
+        Debug.Log("Input recebido: " + moveInput);
     }
+
 
     private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+        if (bolinha == null)
+        {
+            Debug.LogError("BolinhaController não encontrado!");
+            return;
+        }
+
+
+        Vector3 movement = new Vector3(
+            moveInput.x,
+            0f,
+            moveInput.y
+        );
+
+
+        rb.MovePosition(
+            rb.position +
+            movement *
+            bolinha.GetSpeed() *
+            Time.fixedDeltaTime
+        );
     }
 }
