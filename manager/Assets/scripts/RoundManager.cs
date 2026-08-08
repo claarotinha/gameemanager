@@ -40,8 +40,11 @@ public class RoundManager : MonoBehaviour
 
     private void FindRoundUI()
     {
-        player1RoundText = GameObject.Find("P1RoundText")?.GetComponent<TMP_Text>();
-        player2RoundText = GameObject.Find("P2RoundText")?.GetComponent<TMP_Text>();
+        player1RoundText =
+            GameObject.Find("P1RoundText")?.GetComponent<TMP_Text>();
+
+        player2RoundText =
+            GameObject.Find("P2RoundText")?.GetComponent<TMP_Text>();
     }
 
     private void UpdateRoundUI()
@@ -64,7 +67,13 @@ public class RoundManager : MonoBehaviour
         UpdateRoundUI();
 
         Debug.Log("Player 1 ganhou o round!");
-        Debug.Log("Placar: P1 " + player1Wins + " x " + player2Wins + " P2");
+        Debug.Log(
+            "Placar: P1 " +
+            player1Wins +
+            " x " +
+            player2Wins +
+            " P2"
+        );
 
         CheckMatchWinner();
     }
@@ -76,7 +85,13 @@ public class RoundManager : MonoBehaviour
         UpdateRoundUI();
 
         Debug.Log("Player 2 ganhou o round!");
-        Debug.Log("Placar: P1 " + player1Wins + " x " + player2Wins + " P2");
+        Debug.Log(
+            "Placar: P1 " +
+            player1Wins +
+            " x " +
+            player2Wins +
+            " P2"
+        );
 
         CheckMatchWinner();
     }
@@ -85,15 +100,50 @@ public class RoundManager : MonoBehaviour
     {
         if (player1Wins >= 2)
         {
-            Debug.Log("PLAYER 1 GANHOU A PARTIDA!");
+            FinalizarPartida(1);
         }
         else if (player2Wins >= 2)
         {
-            Debug.Log("PLAYER 2 GANHOU A PARTIDA!");
+            FinalizarPartida(2);
         }
         else
         {
             ResetRound();
+        }
+    }
+
+    private void FinalizarPartida(int jogadorVencedor)
+    {
+        Debug.Log(
+            "PLAYER " +
+            jogadorVencedor +
+            " GANHOU A PARTIDA!"
+        );
+
+        if (MatchResultData.Instance == null)
+        {
+            Debug.LogError(
+                "MatchResultData não encontrada!"
+            );
+
+            return;
+        }
+
+        MatchResultData.Instance.DefinirVencedor(
+            jogadorVencedor
+        );
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.LoadScene(
+                "TelaVitoria"
+            );
+        }
+        else
+        {
+            Debug.LogError(
+                "GameManager.Instance não encontrado!"
+            );
         }
     }
 
