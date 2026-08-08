@@ -18,5 +18,5 @@ MonoBehaviour:
   pushForce: 15
   weight: 1
   size: 1
-  player1Color: {r: 0, g: 0, b: 0, a: 0}
-  player2Color: {r: 1, g: 1, b: 1, a: 0}
+  player1Color: {r: 0, g: 0.24528301, b: 0.008710951, a: 0}
+  player2Color: {r: 0, g: 1, b: 0.0064702034, a: 0}

@@ -77,4 +77,21 @@ public class BolinhaController : MonoBehaviour
 
         rb.mass = currentWeight;
     }
+    public void RecarregarDados()
+{
+    if (ballData == null)
+    {
+        Debug.LogError("Nenhum BallData atribuído em " + gameObject.name);
+        return;
+    }
+
+    currentSpeed = ballData.speed;
+    currentPushForce = ballData.pushForce;
+    currentWeight = ballData.weight;
+
+    rb.mass = currentWeight;
+
+    transform.localScale =
+        Vector3.one * ballData.size;
+}
 }

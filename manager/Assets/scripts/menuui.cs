@@ -4,7 +4,7 @@ public class MainMenuUI : MonoBehaviour
 {
     public void StartGame()
     {
-        GameManager.Instance.LoadScene("SampleScene");
+        GameManager.Instance.LoadScene("SelecaoBolinhas");
     }
 
     public void QuitGame()
