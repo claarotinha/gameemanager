@@ -67,6 +67,7 @@ public class RoundManager : MonoBehaviour
         UpdateRoundUI();
 
         Debug.Log("Player 1 ganhou o round!");
+
         Debug.Log(
             "Placar: P1 " +
             player1Wins +
@@ -85,6 +86,7 @@ public class RoundManager : MonoBehaviour
         UpdateRoundUI();
 
         Debug.Log("Player 2 ganhou o round!");
+
         Debug.Log(
             "Placar: P1 " +
             player1Wins +
@@ -149,9 +151,28 @@ public class RoundManager : MonoBehaviour
 
     private void ResetRound()
     {
+        // Reposiciona as bolinhas
         player1.position = player1StartPosition;
         player2.position = player2StartPosition;
 
+        // Reseta as moedas e os bônus
+        PlayerCoins player1Coins =
+            player1.GetComponent<PlayerCoins>();
+
+        PlayerCoins player2Coins =
+            player2.GetComponent<PlayerCoins>();
+
+        if (player1Coins != null)
+        {
+            player1Coins.ResetCoins();
+        }
+
+        if (player2Coins != null)
+        {
+            player2Coins.ResetCoins();
+        }
+
         Debug.Log("Novo round começou!");
+        Debug.Log("Moedas dos jogadores resetadas!");
     }
 }

@@ -1,37 +1,29 @@
+
 using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
     private CoinSpawner spawner;
 
-
-    private void Start()
+    public void SetSpawner(CoinSpawner coinSpawner)
     {
-        spawner =
-            FindFirstObjectByType<CoinSpawner>();
+        spawner = coinSpawner;
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerCoins playerCoins =
-            other.GetComponent<PlayerCoins>();
+        PlayerCoins playerCoins = other.GetComponent<PlayerCoins>();
 
-        if(playerCoins != null)
+        if (playerCoins != null)
         {
-            int before =
-                playerCoins.GetCoins();
-
-
             playerCoins.CollectCoin();
 
-
-            if(playerCoins.GetCoins() > before)
+            if (spawner != null)
             {
                 spawner.RemoveCoin();
-
-                Destroy(gameObject);
             }
+
+            Destroy(gameObject);
         }
     }
 }

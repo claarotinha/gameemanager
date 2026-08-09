@@ -10,30 +10,30 @@ public class PlayerMovement : MonoBehaviour
 
     private BolinhaController bolinha;
 
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         bolinha = GetComponent<BolinhaController>();
     }
 
-
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-
-        Debug.Log("Input recebido: " + moveInput);
     }
-
 
     private void FixedUpdate()
     {
         if (bolinha == null)
         {
-            Debug.LogError("BolinhaController não encontrado!");
+            Debug.LogError(
+                "BolinhaController não encontrado!"
+            );
+
             return;
         }
 
+        if (moveInput.sqrMagnitude <= 0.01f)
+            return;
 
         Vector3 movement = new Vector3(
             moveInput.x,
@@ -41,10 +41,9 @@ public class PlayerMovement : MonoBehaviour
             moveInput.y
         );
 
-
         rb.MovePosition(
             rb.position +
-            movement *
+            movement.normalized *
             bolinha.GetSpeed() *
             Time.fixedDeltaTime
         );

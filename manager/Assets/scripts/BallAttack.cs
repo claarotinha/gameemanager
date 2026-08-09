@@ -13,19 +13,20 @@ public class BallAttack : MonoBehaviour
     [Header("Cooldown")]
     [SerializeField] private float cooldown = 3f;
 
+    [Header("Controle do empurrão")]
+    [SerializeField] private float maxKnockbackSpeed = 12f;
+
     private float cooldownTimer;
 
     private BolinhaController bolinha;
 
-
-    // Usado pela barra de cooldown
     public float Cooldown => cooldown;
 
     public float CooldownPercent
     {
         get
         {
-            if (cooldown <= 0)
+            if (cooldown <= 0f)
                 return 1f;
 
             return Mathf.Clamp01(
@@ -34,86 +35,117 @@ public class BallAttack : MonoBehaviour
         }
     }
 
-
     private void Awake()
     {
         bolinha = GetComponent<BolinhaController>();
     }
 
-
     private void Update()
     {
-        if (cooldownTimer > 0)
+        if (cooldownTimer > 0f)
         {
             cooldownTimer -= Time.deltaTime;
 
-            if (cooldownTimer < 0)
-                cooldownTimer = 0;
+            if (cooldownTimer <= 0f)
+                cooldownTimer = 0f;
         }
     }
 
-
-    // Chamado pelo Input System
     public void OnPush(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        // Só executa no momento em que aperta
+        if (!context.started)
             return;
 
-
-        if (cooldownTimer > 0)
+        // Ainda está no cooldown
+        if (cooldownTimer > 0f)
             return;
 
-
-        PushEnemy();
-
-        cooldownTimer = cooldown;
-    }
-
-
-    private void PushEnemy()
-    {
-        if(enemy == null || enemyRb == null)
+        if (enemy == null || enemyRb == null)
         {
             Debug.LogWarning(
-                "Inimigo não configurado no BallAttack"
+                "Enemy ou Enemy Rigidbody não configurado."
             );
 
             return;
         }
 
-
-        float distance =
-            Vector3.Distance(
-                transform.position,
-                enemy.position
+        if (bolinha == null)
+        {
+            Debug.LogWarning(
+                "BolinhaController não encontrado."
             );
 
-
-        // Muito longe não empurra
-        if(distance > maxDistance)
             return;
+        }
 
+        float distance = Vector3.Distance(
+            transform.position,
+            enemy.position
+        );
 
-        // Direção do ataque
+        if (distance > maxDistance)
+        {
+            Debug.Log("Inimigo está fora do alcance.");
+            return;
+        }
+
+        // Começa o cooldown
+        cooldownTimer = cooldown;
+
+        PushEnemy(distance);
+    }
+
+    private void PushEnemy(float distance)
+    {
         Vector3 direction =
-            (enemy.position - transform.position)
-            .normalized;
+            (enemy.position - transform.position).normalized;
 
-
-        // Quanto mais perto, maior a força
         float distanceMultiplier =
             1f - (distance / maxDistance);
 
-
         float force =
-            bolinha.GetPushForce()
-            *
+            bolinha.GetPushForce() *
             distanceMultiplier;
 
+        // Remove velocidade horizontal anterior
+        Vector3 velocity = enemyRb.linearVelocity;
 
+        enemyRb.linearVelocity = new Vector3(
+            0f,
+            velocity.y,
+            0f
+        );
+
+        // Aplica UM impulso
         enemyRb.AddForce(
             direction * force,
             ForceMode.Impulse
+        );
+
+        // Limita a velocidade horizontal
+        Vector3 horizontalVelocity =
+            new Vector3(
+                enemyRb.linearVelocity.x,
+                0f,
+                enemyRb.linearVelocity.z
+            );
+
+        if (horizontalVelocity.magnitude > maxKnockbackSpeed)
+        {
+            horizontalVelocity =
+                horizontalVelocity.normalized *
+                maxKnockbackSpeed;
+
+            enemyRb.linearVelocity = new Vector3(
+                horizontalVelocity.x,
+                enemyRb.linearVelocity.y,
+                horizontalVelocity.z
+            );
+        }
+
+        Debug.Log(
+            "EMPURRÃO APLICADO | Força: " + force
         );
     }
 }

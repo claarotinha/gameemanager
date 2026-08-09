@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class BolinhaSelectionData : MonoBehaviour
@@ -25,3 +26,4 @@ public class BolinhaSelectionData : MonoBehaviour
         escolhaP2 = p2;
     }
 }
+

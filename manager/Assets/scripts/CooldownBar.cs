@@ -36,9 +36,28 @@ public class CooldownBar : MonoBehaviour
 
     private void FindPlayer()
     {
-        GameObject player = GameObject.FindGameObjectWithTag(playerTag);
+        GameObject player =
+            GameObject.FindGameObjectWithTag(playerTag);
 
-        if (player != null)
-            ballAttack = player.GetComponent<BallAttack>();
+        if (player == null)
+        {
+            Debug.LogWarning(
+                "Nenhum objeto encontrado com a tag: "
+                + playerTag
+            );
+
+            return;
+        }
+
+        ballAttack =
+            player.GetComponent<BallAttack>();
+
+        if (ballAttack == null)
+        {
+            Debug.LogWarning(
+                "O objeto " + player.name +
+                " não possui BallAttack."
+            );
+        }
     }
 }
