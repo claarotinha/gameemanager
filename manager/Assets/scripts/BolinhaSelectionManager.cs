@@ -114,12 +114,10 @@ public class BolinhaSelectionManager : MonoBehaviour
 
         BallData bola = bolinhas[indiceP1];
 
-        // Mantido caso vocês utilizem Sprite futuramente
-        if (imagemBolaP1 != null)
-            imagemBolaP1.sprite = bola.sprite;
-
         if (nomeBolaP1 != null)
+        {
             nomeBolaP1.text = bola.ballName;
+        }
 
         if (statusP1 != null)
         {
@@ -130,7 +128,15 @@ public class BolinhaSelectionManager : MonoBehaviour
                 "\nTamanho: " + bola.size.ToString("F1");
         }
 
-        AtualizarPreview(
+        // Imagem principal
+        AtualizarImagem(
+            imagemBolaP1,
+            bola,
+            true
+        );
+
+        // Preview
+        AtualizarImagem(
             previewBolaP1,
             bola,
             true
@@ -149,12 +155,10 @@ public class BolinhaSelectionManager : MonoBehaviour
 
         BallData bola = bolinhas[indiceP2];
 
-        // Mantido caso vocês utilizem Sprite futuramente
-        if (imagemBolaP2 != null)
-            imagemBolaP2.sprite = bola.sprite;
-
         if (nomeBolaP2 != null)
+        {
             nomeBolaP2.text = bola.ballName;
+        }
 
         if (statusP2 != null)
         {
@@ -165,7 +169,15 @@ public class BolinhaSelectionManager : MonoBehaviour
                 "\nTamanho: " + bola.size.ToString("F1");
         }
 
-        AtualizarPreview(
+        // Imagem principal
+        AtualizarImagem(
+            imagemBolaP2,
+            bola,
+            false
+        );
+
+        // Preview
+        AtualizarImagem(
             previewBolaP2,
             bola,
             false
@@ -174,37 +186,86 @@ public class BolinhaSelectionManager : MonoBehaviour
 
 
     // =====================================================
-    // PREVIEW
+    // ATUALIZAR IMAGEM
     // =====================================================
 
-    private void AtualizarPreview(
-        Image preview,
+    private void AtualizarImagem(
+        Image imagem,
         BallData bola,
         bool jogador1)
     {
-        if (preview == null || bola == null)
-            return;
+        if (imagem == null)
+        {
+            Debug.LogWarning(
+                "Uma imagem da seleção não foi atribuída."
+            );
 
-        // Escolhe a cor de acordo com o jogador
+            return;
+        }
+
+        if (bola == null)
+        {
+            Debug.LogWarning(
+                "BallData vazio."
+            );
+
+            return;
+        }
+
+        // Ativa o objeto
+        imagem.gameObject.SetActive(true);
+
+        // Sprite do BallData
+        if (bola.sprite != null)
+        {
+            imagem.sprite = bola.sprite;
+        }
+        else
+        {
+            Debug.LogWarning(
+                "A bolinha " +
+                bola.ballName +
+                " não possui Sprite."
+            );
+        }
+
+        // Escolhe a cor
         Color cor;
 
         if (jogador1)
+        {
             cor = bola.player1Color;
+        }
         else
+        {
             cor = bola.player2Color;
+        }
 
-        // Aplica a cor
-        preview.color = cor;
+        // Garante que a imagem fique visível
+        cor.a = 1f;
 
-        // Altera o tamanho da imagem de acordo
-        // com o tamanho da bolinha escolhida
+        imagem.color = cor;
+
+        // Mantém proporção
+        imagem.preserveAspect = true;
+
+        // Tamanho
         float tamanho = bola.size;
 
-        preview.rectTransform.sizeDelta =
+        imagem.rectTransform.sizeDelta =
             new Vector2(
                 150f * tamanho,
                 150f * tamanho
             );
+
+        // Garante que o CanvasRenderer esteja ativo
+        CanvasRenderer renderer =
+            imagem.GetComponent<CanvasRenderer>();
+
+        if (renderer != null)
+        {
+            renderer.SetAlpha(1f);
+        }
     }
 
 
@@ -265,8 +326,6 @@ public class BolinhaSelectionManager : MonoBehaviour
             "Os dois jogadores confirmaram!"
         );
 
-        // Verifica se existe o objeto que guarda
-        // as escolhas dos jogadores.
         if (BolinhaSelectionData.Instance == null)
         {
             Debug.LogError(
@@ -276,14 +335,11 @@ public class BolinhaSelectionManager : MonoBehaviour
             return;
         }
 
-        // Guarda as escolhas
         BolinhaSelectionData.Instance.DefinirEscolhas(
             escolhaP1,
             escolhaP2
         );
 
-        // Usa o GameManager para carregar a Gameplay
-        // e a GUI.
         if (GameManager.Instance != null)
         {
             GameManager.Instance.LoadScene(

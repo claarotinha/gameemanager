@@ -5,6 +5,7 @@ public class BallData : ScriptableObject
 {
     public string ballName;
 
+    [Header("Imagem da Bolinha")]
     public Sprite sprite;
 
     [Header("Status")]
@@ -14,6 +15,6 @@ public class BallData : ScriptableObject
     public float size = 1f;
 
     [Header("Cor")]
-    public Color player1Color;
-    public Color player2Color;
+    public Color player1Color = Color.white;
+    public Color player2Color = Color.white;
 }
