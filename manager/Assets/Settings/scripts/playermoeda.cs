@@ -1,11 +1,9 @@
-
 using UnityEngine;
 
 public class PlayerCoins : MonoBehaviour
 {
     [Header("Configuração")]
     [SerializeField] private int playerID = 1;
-    [SerializeField] private int maxCoins = 5;
 
     private int coins;
 
@@ -18,14 +16,10 @@ public class PlayerCoins : MonoBehaviour
 
     public void CollectCoin()
     {
-        // Impede pegar mais que 5 moedas
-        if (coins >= maxCoins)
-            return;
-
-        // Adiciona uma moeda
+        // Agora não existe limite de moedas
         coins++;
 
-        // Aplica o bônus correspondente à quantidade de moedas
+        // Aplica o bônus da moeda
         if (bolinhaController != null)
         {
             bolinhaController.AddCoinBonus();
@@ -41,19 +35,16 @@ public class PlayerCoins : MonoBehaviour
         return coins;
     }
 
-    // Reseta as moedas e os bônus no começo de um novo round
+    // Reseta as moedas no começo de um novo round
     public void ResetCoins()
     {
-        // Zera as moedas
         coins = 0;
 
-        // Volta os atributos da bolinha para os valores originais
         if (bolinhaController != null)
         {
             bolinhaController.RecarregarDados();
         }
 
-        // Atualiza a interface para mostrar 0/5
         PlayerObserverManager.NotifyCoinChanged(
             playerID,
             coins
