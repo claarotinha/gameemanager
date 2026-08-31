@@ -7,6 +7,11 @@ public class MainMenuUI : MonoBehaviour
         GameManager.Instance.LoadScene("SelecaoBolinhas");
     }
 
+    public void StartPlatformGame()
+    {
+        GameManager.Instance.LoadScene("NovoJogo");
+    }
+
     public void QuitGame()
     {
         GameManager.Instance.QuitGame();
