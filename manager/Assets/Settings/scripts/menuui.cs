@@ -2,14 +2,28 @@ using UnityEngine;
 
 public class MainMenuUI : MonoBehaviour
 {
+    // Jogo antigo das bolinhas
     public void StartGame()
     {
         GameManager.Instance.LoadScene("SelecaoBolinhas");
     }
 
-    public void StartPlatformGame()
+    // Abre a tela do novo jogo
+    public void StartNewGame()
     {
         GameManager.Instance.LoadScene("NovoJogo");
+    }
+
+    // Começa o novo jogo
+    public void StartPlatformGame()
+    {
+        GameManager.Instance.LoadScene("Fase1");
+    }
+
+    // Volta para o menu principal
+    public void BackToMenu()
+    {
+        GameManager.Instance.LoadScene("MenuPrincipal");
     }
 
     public void QuitGame()
