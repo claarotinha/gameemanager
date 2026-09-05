@@ -23,33 +23,75 @@ public class PlayerPlatformController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        moveAction = playerControls.FindAction("Player1/Move");
-        jumpAction = playerControls.FindAction("Player1/Push");
+        if (playerControls == null)
+        {
+            Debug.LogError("O Player Controls não foi atribuído!");
+            return;
+        }
+
+        InputActionMap player1Map = playerControls.FindActionMap("Player1");
+
+        if (player1Map == null)
+        {
+            Debug.LogError("O Action Map Player1 não foi encontrado!");
+            return;
+        }
+
+        moveAction = player1Map.FindAction("Move");
+        jumpAction = player1Map.FindAction("Push");
+
+        if (moveAction == null)
+        {
+            Debug.LogError("A ação Move não foi encontrada dentro de Player1!");
+        }
+
+        if (jumpAction == null)
+        {
+            Debug.LogError("A ação Push não foi encontrada dentro de Player1!");
+        }
     }
 
     private void OnEnable()
     {
-        moveAction.Enable();
-        jumpAction.Enable();
+        if (moveAction != null)
+        {
+            moveAction.Enable();
+        }
 
-        jumpAction.performed += OnJump;
+        if (jumpAction != null)
+        {
+            jumpAction.Enable();
+            jumpAction.performed += OnJump;
+        }
     }
 
     private void OnDisable()
     {
-        jumpAction.performed -= OnJump;
+        if (jumpAction != null)
+        {
+            jumpAction.performed -= OnJump;
+            jumpAction.Disable();
+        }
 
-        moveAction.Disable();
-        jumpAction.Disable();
+        if (moveAction != null)
+        {
+            moveAction.Disable();
+        }
     }
 
     private void Update()
     {
-        movimentoInput = moveAction.ReadValue<Vector2>();
+        if (moveAction != null)
+        {
+            movimentoInput = moveAction.ReadValue<Vector2>();
+        }
     }
 
     private void FixedUpdate()
     {
+        if (rb == null)
+            return;
+
         Vector3 movimento = new Vector3(
             movimentoInput.x,
             0f,
