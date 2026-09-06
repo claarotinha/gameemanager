@@ -21,7 +21,10 @@ EditorBuildSettings:
     path: Assets/Scenes/NovoJogo.unity
     guid: 2578306eb17be724c841f2ba7e137890
   - enabled: 1
-    path: Assets/Scenes/Fase1CM.unity
+    path: Assets/Scenes/CarregarJogo.unity
+    guid: 7c6ba6d71c2e6014abfe83fcb71bf615
+  - enabled: 1
+    path: Assets/Scenes/Fase1.unity
     guid: dda8660da001a304b919104bcda8ba68
   - enabled: 1
     path: Assets/Scenes/Fase2.unity

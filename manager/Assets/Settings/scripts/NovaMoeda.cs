@@ -24,7 +24,8 @@ public class NovaMoeda : MonoBehaviour
         {
             coletada = true;
 
-            NovoCoinManager.Instance.AdicionarMoeda(this);
+            NovoCoinManager.Instance
+                .AdicionarMoeda(this);
 
             gameObject.SetActive(false);
         }
@@ -39,5 +40,10 @@ public class NovaMoeda : MonoBehaviour
     public bool EstaColetada()
     {
         return coletada;
+    }
+
+    public string GetID()
+    {
+        return gameObject.name;
     }
 }

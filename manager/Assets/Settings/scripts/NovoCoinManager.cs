@@ -11,7 +11,8 @@ public class NovoCoinManager : MonoBehaviour
     private int moedas = 0;
     private int totalMoedas = 0;
 
-    private List<NovaMoeda> todasAsMoedas = new List<NovaMoeda>();
+    private List<NovaMoeda> todasAsMoedas =
+        new List<NovaMoeda>();
 
     private void Awake()
     {
@@ -23,9 +24,12 @@ public class NovoCoinManager : MonoBehaviour
                 FindObjectsSortMode.None
             );
 
-        todasAsMoedas.AddRange(moedasEncontradas);
+        todasAsMoedas.AddRange(
+            moedasEncontradas
+        );
 
-        totalMoedas = todasAsMoedas.Count;
+        totalMoedas =
+            todasAsMoedas.Count;
     }
 
     private void Start()
@@ -33,41 +37,54 @@ public class NovoCoinManager : MonoBehaviour
         AtualizarContador();
     }
 
-    public void AdicionarMoeda(NovaMoeda moeda)
+    public void AdicionarMoeda(
+        NovaMoeda moeda)
     {
         moedas++;
+
         AtualizarContador();
     }
 
-    public void DefinirMoedas(int quantidade)
+    public void DefinirMoedas(
+        int quantidade)
     {
         moedas = quantidade;
+
         AtualizarContador();
     }
 
-    public void RestaurarMoedasDoCheckpoint(
-        List<NovaMoeda> moedasDoCheckpoint)
+    public void RestaurarMoedasPorNome(
+        List<string> moedasColetadas)
     {
-        foreach (NovaMoeda moeda in todasAsMoedas)
+        foreach (
+            NovaMoeda moeda
+            in todasAsMoedas)
         {
             if (moeda == null)
                 continue;
 
-            if (moedasDoCheckpoint.Contains(moeda))
+            if (moedasColetadas.Contains(
+                moeda.GetID()))
             {
                 moeda.gameObject.SetActive(false);
             }
             else
             {
-                moeda.gameObject.SetActive(true);
+                moeda.RestaurarMoeda();
             }
         }
     }
 
     private void AtualizarContador()
     {
-        contadorTexto.text =
-            "Moedas: " + moedas + "/" + totalMoedas;
+        if (contadorTexto != null)
+        {
+            contadorTexto.text =
+                "Moedas: " +
+                moedas +
+                "/" +
+                totalMoedas;
+        }
     }
 
     public int GetMoedas()
@@ -78,5 +95,27 @@ public class NovoCoinManager : MonoBehaviour
     public int GetTotalMoedas()
     {
         return totalMoedas;
+    }
+
+    public List<string>
+        GetMoedasColetadas()
+    {
+        List<string> resultado =
+            new List<string>();
+
+        foreach (
+            NovaMoeda moeda
+            in todasAsMoedas)
+        {
+            if (moeda != null &&
+                moeda.EstaColetada())
+            {
+                resultado.Add(
+                    moeda.GetID()
+                );
+            }
+        }
+
+        return resultado;
     }
 }
