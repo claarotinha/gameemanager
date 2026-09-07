@@ -888,6 +888,7 @@ GameObject:
   - component: {fileID: 1329549155}
   - component: {fileID: 1329549154}
   - component: {fileID: 1329549153}
+  - component: {fileID: 1329549157}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -979,6 +980,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1329549157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329549152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f168c20f358c9645ad93b56433951f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoadGameUI
+  slot0: {fileID: 1346405748}
+  slot1: {fileID: 1395340694}
+  slot2: {fileID: 1852916021}
+  slot3: {fileID: 2056882440}
 --- !u!1 &1332255684
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,7 +1216,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 12337020}
+      - m_Target: {fileID: 1329549157}
         m_TargetAssemblyTypeName: LoadGameUI, Assembly-CSharp
         m_MethodName: CarregarSlot0
         m_Mode: 1
@@ -1332,7 +1349,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 12337020}
+      - m_Target: {fileID: 1329549157}
         m_TargetAssemblyTypeName: LoadGameUI, Assembly-CSharp
         m_MethodName: CarregarSlot1
         m_Mode: 1
@@ -1683,7 +1700,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 12337020}
+      - m_Target: {fileID: 1329549157}
         m_TargetAssemblyTypeName: LoadGameUI, Assembly-CSharp
         m_MethodName: Voltar
         m_Mode: 1
@@ -1953,7 +1970,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 12337020}
+      - m_Target: {fileID: 1329549157}
         m_TargetAssemblyTypeName: LoadGameUI, Assembly-CSharp
         m_MethodName: CarregarSlot2
         m_Mode: 1
@@ -2086,7 +2103,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 12337020}
+      - m_Target: {fileID: 1329549157}
         m_TargetAssemblyTypeName: LoadGameUI, Assembly-CSharp
         m_MethodName: CarregarSlot3
         m_Mode: 1

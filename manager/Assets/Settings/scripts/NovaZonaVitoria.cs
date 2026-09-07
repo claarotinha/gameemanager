@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class NovaZonaVitoria : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class NovaZonaVitoria : MonoBehaviour
 
     [Header("Próxima fase")]
     [SerializeField] private string proximaFase = "Fase2";
+
+    [Header("Última fase")]
+    [SerializeField] private bool ultimaFase = false;
+    [SerializeField] private NovaTelaFinal telaFinal;
 
     private bool venceu = false;
 
@@ -43,8 +48,47 @@ public class NovaZonaVitoria : MonoBehaviour
 
         Time.timeScale = 0f;
 
-        Debug.Log("Fase concluída!");
-        Debug.Log("Moedas: " + moedas + "/" + total);
+        // ==========================================
+        // AUTOSAVE
+        // ==========================================
+
+        if (SaveManager.Instance != null)
+        {
+            SaveData dados = new SaveData();
+
+            if (ultimaFase)
+            {
+                // Última fase concluída
+                dados.fase = "Fase2";
+            }
+            else
+            {
+                // Salva a próxima fase
+                dados.fase = proximaFase;
+            }
+
+            dados.checkpointAtivado = false;
+
+            dados.checkpointX = 0f;
+            dados.checkpointY = 0f;
+            dados.checkpointZ = 0f;
+
+            dados.moedasCheckpoint = 0;
+
+            dados.moedasColetadasCheckpoint =
+                new List<string>();
+
+            dados.faseConcluida = true;
+
+            SaveManager.Instance.Salvar(
+                dados,
+                0
+            );
+
+            Debug.Log(
+                "Conclusão da fase salva no Slot 0!"
+            );
+        }
     }
 
     private void Update()
@@ -57,7 +101,25 @@ public class NovaZonaVitoria : MonoBehaviour
         {
             Time.timeScale = 1f;
 
-            SceneManager.LoadScene(proximaFase);
+            if (ultimaFase)
+            {
+                if (telaFinal != null)
+                {
+                    telaFinal.MostrarFinal();
+                }
+                else
+                {
+                    Debug.LogError(
+                        "Tela Final não foi atribuída!"
+                    );
+                }
+            }
+            else
+            {
+                SceneManager.LoadScene(
+                    proximaFase
+                );
+            }
         }
     }
 

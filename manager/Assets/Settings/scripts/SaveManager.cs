@@ -253,7 +253,30 @@ public class SaveManager : MonoBehaviour
             "save_slot_" + slot + ".dat"
         );
     }
+// ==========================================
+// APAGAR TODOS OS SAVES
+// ==========================================
 
+public void ApagarTodosOsSaves()
+{
+    for (int slot = 0; slot <= 3; slot++)
+    {
+        string caminho = ObterCaminho(slot);
+
+        if (File.Exists(caminho))
+        {
+            File.Delete(caminho);
+
+            Debug.Log(
+                "Save do slot " +
+                slot +
+                " apagado."
+            );
+        }
+    }
+
+    Debug.Log("Todos os saves foram apagados!");
+}
     // ==========================================
     // CRIPTOGRAFIA
     // ==========================================

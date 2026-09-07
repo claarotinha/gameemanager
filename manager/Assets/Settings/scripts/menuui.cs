@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class MainMenuUI : MonoBehaviour
 {
-    // Jogo antigo das bolinhas
+    // ==========================================
+    // JOGO ANTIGO DAS BOLINHAS
+    // ==========================================
+
     public void StartGame()
     {
         GameManager.Instance.LoadScene(
@@ -10,7 +13,10 @@ public class MainMenuUI : MonoBehaviour
         );
     }
 
-    // Abre a tela do novo jogo
+    // ==========================================
+    // ABRIR TELA "NOVO JOGO"
+    // ==========================================
+
     public void StartNewGame()
     {
         GameManager.Instance.LoadScene(
@@ -18,15 +24,29 @@ public class MainMenuUI : MonoBehaviour
         );
     }
 
-    // Começa o novo jogo
+    // ==========================================
+    // COMEÇAR NOVA PARTIDA
+    // ==========================================
+
     public void StartPlatformGame()
     {
+        // Apaga todos os saves anteriores
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance
+                .ApagarTodosOsSaves();
+        }
+
+        // Começa a Fase 1
         GameManager.Instance.LoadScene(
             "Fase1"
         );
     }
 
-    // Abre a tela de carregar
+    // ==========================================
+    // CARREGAR JOGO
+    // ==========================================
+
     public void OpenLoadGame()
     {
         GameManager.Instance.LoadScene(
@@ -34,13 +54,20 @@ public class MainMenuUI : MonoBehaviour
         );
     }
 
-    // Volta para o menu principal
+    // ==========================================
+    // VOLTAR AO MENU
+    // ==========================================
+
     public void BackToMenu()
     {
         GameManager.Instance.LoadScene(
             "MenuPrincipal"
         );
     }
+
+    // ==========================================
+    // SAIR
+    // ==========================================
 
     public void QuitGame()
     {

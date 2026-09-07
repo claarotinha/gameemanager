@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 using UnityEngine.UI;
 
 public class LoadGameUI : MonoBehaviour
@@ -16,24 +15,57 @@ public class LoadGameUI : MonoBehaviour
         AtualizarSlots();
     }
 
+    // ==========================================
+    // VERIFICAR SLOTS
+    // ==========================================
+
     private void AtualizarSlots()
     {
+        if (SaveManager.Instance == null)
+        {
+            Debug.LogError(
+                "SaveManager não encontrado!"
+            );
+
+            return;
+        }
+
         slot0.interactable =
-            SaveManager.Instance != null &&
             SaveManager.Instance.ExisteSave(0);
 
         slot1.interactable =
-            SaveManager.Instance != null &&
             SaveManager.Instance.ExisteSave(1);
 
         slot2.interactable =
-            SaveManager.Instance != null &&
             SaveManager.Instance.ExisteSave(2);
 
         slot3.interactable =
-            SaveManager.Instance != null &&
             SaveManager.Instance.ExisteSave(3);
+
+        Debug.Log(
+            "Slot 0: " +
+            SaveManager.Instance.ExisteSave(0)
+        );
+
+        Debug.Log(
+            "Slot 1: " +
+            SaveManager.Instance.ExisteSave(1)
+        );
+
+        Debug.Log(
+            "Slot 2: " +
+            SaveManager.Instance.ExisteSave(2)
+        );
+
+        Debug.Log(
+            "Slot 3: " +
+            SaveManager.Instance.ExisteSave(3)
+        );
     }
+
+    // ==========================================
+    // CARREGAR SLOTS
+    // ==========================================
 
     public void CarregarSlot0()
     {
@@ -81,6 +113,10 @@ public class LoadGameUI : MonoBehaviour
 
         SaveManager.Instance.Carregar(slot);
     }
+
+    // ==========================================
+    // VOLTAR
+    // ==========================================
 
     public void Voltar()
     {
