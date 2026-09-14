@@ -342,7 +342,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -624,8 +624,8 @@ RectTransform:
   - {fileID: 1408119041}
   - {fileID: 1821657475}
   - {fileID: 236650752}
-  - {fileID: 1751417403}
   - {fileID: 1790371357}
+  - {fileID: 1751417403}
   - {fileID: 1019236111}
   - {fileID: 1286857713}
   m_Father: {fileID: 0}
@@ -887,8 +887,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.5402, y: 37}
-  m_SizeDelta: {x: 257.59, y: 44.3832}
+  m_AnchoredPosition: {x: -3.360783, y: 38.536594}
+  m_SizeDelta: {x: 322.5317, y: 55.5727}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1019236112
 MonoBehaviour:
@@ -1157,8 +1157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -25.8425}
-  m_SizeDelta: {x: 260.6705, y: 51.6843}
+  m_AnchoredPosition: {x: -4.6390133, y: -44.21219}
+  m_SizeDelta: {x: 322.5317, y: 64.7145}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1286857714
 MonoBehaviour:
@@ -1673,8 +1673,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.5408, y: -88}
-  m_SizeDelta: {x: 257.59, y: 39.3303}
+  m_AnchoredPosition: {x: -4, y: -128}
+  m_SizeDelta: {x: 323.81, y: 50.5804}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1751417404
 MonoBehaviour:
@@ -1804,7 +1804,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -37.732, y: 115}
+  m_AnchoredPosition: {x: -42, y: 144}
   m_SizeDelta: {x: 336.1359, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1790371358
@@ -1836,8 +1836,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4294962176
+  m_fontColor: {r: 0, g: 0.9268887, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1854,8 +1854,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
