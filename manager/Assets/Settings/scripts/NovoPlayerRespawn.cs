@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class NovoPlayerRespawn : MonoBehaviour
 {
-    [SerializeField] private float alturaDeMorte = -5f;
+    [Header("Ponto inicial")]
+    [SerializeField] private Transform pontoInicial;
 
     private Rigidbody rb;
 
@@ -11,36 +12,58 @@ public class NovoPlayerRespawn : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    public void Morrer()
     {
-        if (transform.position.y < alturaDeMorte)
-        {
-            Respawn();
-        }
+        Respawn();
     }
 
     private void Respawn()
     {
-        if (NovoCheckpointManager.Instance.CheckpointAtivado())
+        Vector3 posicaoRespawn;
+
+        // Se existe checkpoint, volta para ele
+        if (NovoCheckpointManager.Instance != null &&
+            NovoCheckpointManager.Instance.CheckpointAtivado())
         {
-            Vector3 posicao =
+            posicaoRespawn =
                 NovoCheckpointManager.Instance.GetPosicaoCheckpoint();
 
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
 
-            rb.position = posicao;
+            rb.position = posicaoRespawn;
 
-            NovoCoinManager.Instance.DefinirMoedas(
-                NovoCheckpointManager.Instance.GetMoedasCheckpoint()
-            );
+            // Volta a quantidade de moedas do checkpoint
+            if (NovoCoinManager.Instance != null)
+            {
+                NovoCoinManager.Instance.DefinirMoedas(
+                    NovoCheckpointManager.Instance.GetMoedasCheckpoint()
+                );
 
-            NovoCheckpointManager.Instance
-                .RestaurarMoedasDoCheckpoint();
+                NovoCheckpointManager.Instance
+                    .RestaurarMoedasDoCheckpoint();
+            }
+
+            Debug.Log("Respawn no checkpoint.");
         }
         else
         {
-            Debug.Log("Nenhum checkpoint ativado.");
+            // Sem checkpoint: volta para o começo da fase
+            if (pontoInicial == null)
+            {
+                Debug.LogError(
+                    "Ponto Inicial não foi atribuído!"
+                );
+
+                return;
+            }
+
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
+            rb.position = pontoInicial.position;
+
+            Debug.Log("Sem checkpoint. Voltando ao início da fase.");
         }
     }
 }
