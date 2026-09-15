@@ -12,43 +12,76 @@ public class NovoPlayerRespawn : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    // ==========================================
+    // MORRER
+    // ==========================================
+
     public void Morrer()
     {
         Respawn();
     }
 
+    // ==========================================
+    // RESPAWN
+    // ==========================================
+
     private void Respawn()
     {
-        Vector3 posicaoRespawn;
-
-        // Se existe checkpoint, volta para ele
-        if (NovoCheckpointManager.Instance != null &&
-            NovoCheckpointManager.Instance.CheckpointAtivado())
+        if (rb == null)
         {
-            posicaoRespawn =
-                NovoCheckpointManager.Instance.GetPosicaoCheckpoint();
+            Debug.LogError(
+                "Rigidbody não encontrado no Player!"
+            );
 
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            return;
+        }
 
-            rb.position = posicaoRespawn;
+        // ======================================
+        // TEM CHECKPOINT?
+        // ======================================
 
-            // Volta a quantidade de moedas do checkpoint
+        if (
+            NovoCheckpointManager.Instance != null &&
+            NovoCheckpointManager.Instance
+                .CheckpointAtivado()
+        )
+        {
+            Vector3 posicaoRespawn =
+                NovoCheckpointManager.Instance
+                .GetPosicaoCheckpoint();
+
+            rb.linearVelocity =
+                Vector3.zero;
+
+            rb.angularVelocity =
+                Vector3.zero;
+
+            rb.position =
+                posicaoRespawn;
+
+            // Volta às moedas do checkpoint
             if (NovoCoinManager.Instance != null)
             {
-                NovoCoinManager.Instance.DefinirMoedas(
-                    NovoCheckpointManager.Instance.GetMoedasCheckpoint()
-                );
+                NovoCoinManager.Instance
+                    .DefinirMoedas(
+                        NovoCheckpointManager.Instance
+                        .GetMoedasCheckpoint()
+                    );
 
                 NovoCheckpointManager.Instance
                     .RestaurarMoedasDoCheckpoint();
             }
 
-            Debug.Log("Respawn no checkpoint.");
+            Debug.Log(
+                "Morreu: voltando ao checkpoint."
+            );
         }
         else
         {
-            // Sem checkpoint: volta para o começo da fase
+            // ==================================
+            // SEM CHECKPOINT
+            // ==================================
+
             if (pontoInicial == null)
             {
                 Debug.LogError(
@@ -58,12 +91,34 @@ public class NovoPlayerRespawn : MonoBehaviour
                 return;
             }
 
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            rb.linearVelocity =
+                Vector3.zero;
 
-            rb.position = pontoInicial.position;
+            rb.angularVelocity =
+                Vector3.zero;
 
-            Debug.Log("Sem checkpoint. Voltando ao início da fase.");
+            rb.position =
+                pontoInicial.position;
+
+            // IMPORTANTE:
+            // Sem checkpoint, as moedas voltam
+            // para 0.
+            if (NovoCoinManager.Instance != null)
+            {
+                NovoCoinManager.Instance
+                    .DefinirMoedas(0);
+
+                NovoCoinManager.Instance
+                    .RestaurarTodasAsMoedas();
+            }
+
+            Debug.Log(
+                "Morreu sem checkpoint."
+            );
+
+            Debug.Log(
+                "Voltando ao início com 0 moedas."
+            );
         }
     }
 }

@@ -6,13 +6,22 @@ public class NovoCheckpointManager : MonoBehaviour
 {
     public static NovoCheckpointManager Instance;
 
+    // ==========================================
+    // DADOS DO CHECKPOINT
+    // ==========================================
+
     private Vector3 posicaoCheckpoint;
+
     private int moedasCheckpoint;
 
     private List<NovaMoeda> moedasColetadasCheckpoint =
         new List<NovaMoeda>();
 
     private bool checkpointAtivado = false;
+
+    // ==========================================
+    // AWAKE
+    // ==========================================
 
     private void Awake()
     {
@@ -34,59 +43,70 @@ public class NovoCheckpointManager : MonoBehaviour
 
         NovaMoeda[] todasAsMoedas =
             FindObjectsByType<NovaMoeda>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None
+                FindObjectsInactive.Include
             );
 
         foreach (NovaMoeda moeda in todasAsMoedas)
         {
             if (moeda.EstaColetada())
             {
-                moedasColetadasCheckpoint.Add(moeda);
+                moedasColetadasCheckpoint.Add(
+                    moeda
+                );
             }
         }
 
         checkpointAtivado = true;
 
-        // Autosave
-        SalvarAutosave();
+        // O checkpoint também cria um AUTOSAVE.
+        SaveData dados =
+            CriarDadosDoCheckpoint();
 
-        Debug.Log("Checkpoint salvo!");
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.Salvar(
+                dados,
+                0
+            );
+
+            Debug.Log(
+                "Autosave do checkpoint realizado!"
+            );
+        }
+        else
+        {
+            Debug.LogError(
+                "SaveManager não encontrado!"
+            );
+        }
+
+        Debug.Log(
+            "Checkpoint ativado!"
+        );
+
+        Debug.Log(
+            "Moedas no checkpoint: " +
+            moedasCheckpoint
+        );
     }
 
     // ==========================================
-    // CRIAR DADOS DO SAVE
+    // CRIAR SAVE DO CHECKPOINT
     // ==========================================
 
-    public SaveData CriarDadosDoSave()
+    private SaveData CriarDadosDoCheckpoint()
     {
-        SaveData dados = new SaveData();
+        SaveData dados =
+            new SaveData();
 
         dados.fase =
-            SceneManager.GetActiveScene().name;
+            SceneManager
+            .GetActiveScene()
+            .name;
 
         dados.checkpointAtivado =
-            checkpointAtivado;
+            true;
 
-        // Se ainda não ativou checkpoint,
-        // o save representa o início da fase.
-        if (!checkpointAtivado)
-        {
-            dados.checkpointX = 0f;
-            dados.checkpointY = 0f;
-            dados.checkpointZ = 0f;
-
-            dados.moedasCheckpoint = 0;
-
-            dados.moedasColetadasCheckpoint =
-                new List<string>();
-
-            dados.faseConcluida = false;
-
-            return dados;
-        }
-
-        // Se tem checkpoint, salva o estado dele.
         dados.checkpointX =
             posicaoCheckpoint.x;
 
@@ -102,37 +122,113 @@ public class NovoCheckpointManager : MonoBehaviour
         dados.moedasColetadasCheckpoint =
             GetNomesMoedasCheckpoint();
 
+        // O autosave do checkpoint também
+        // começa exatamente no checkpoint.
+        dados.possuiPosicaoSalva = true;
+
+        dados.posicaoSalvaX =
+            posicaoCheckpoint.x;
+
+        dados.posicaoSalvaY =
+            posicaoCheckpoint.y;
+
+        dados.posicaoSalvaZ =
+            posicaoCheckpoint.z;
+
+        dados.moedasSalvas =
+            moedasCheckpoint;
+
+        dados.moedasColetadasSalvas =
+            GetNomesMoedasCheckpoint();
+
         dados.faseConcluida = false;
 
         return dados;
     }
 
     // ==========================================
-    // AUTOSAVE
+    // CRIAR SAVE MANUAL
     // ==========================================
 
-    private void SalvarAutosave()
+    public SaveData CriarDadosSaveManual(
+        Vector3 posicaoJogador
+    )
     {
-        if (SaveManager.Instance == null)
-        {
-            Debug.LogError(
-                "SaveManager não encontrado!"
-            );
+        SaveData dados =
+            new SaveData();
 
-            return;
+        dados.fase =
+            SceneManager
+            .GetActiveScene()
+            .name;
+
+        // ======================================
+        // MANTER CHECKPOINT
+        // ======================================
+
+        dados.checkpointAtivado =
+            checkpointAtivado;
+
+        if (checkpointAtivado)
+        {
+            dados.checkpointX =
+                posicaoCheckpoint.x;
+
+            dados.checkpointY =
+                posicaoCheckpoint.y;
+
+            dados.checkpointZ =
+                posicaoCheckpoint.z;
+
+            dados.moedasCheckpoint =
+                moedasCheckpoint;
+
+            dados.moedasColetadasCheckpoint =
+                GetNomesMoedasCheckpoint();
+        }
+        else
+        {
+            dados.checkpointX = 0f;
+            dados.checkpointY = 0f;
+            dados.checkpointZ = 0f;
+
+            dados.moedasCheckpoint = 0;
+
+            dados.moedasColetadasCheckpoint =
+                new List<string>();
         }
 
-        SaveData dados =
-            CriarDadosDoSave();
+        // ======================================
+        // POSIÇÃO EXATA DO SAVE MANUAL
+        // ======================================
 
-        SaveManager.Instance.Salvar(
-            dados,
-            0
-        );
+        dados.possuiPosicaoSalva = true;
+
+        dados.posicaoSalvaX =
+            posicaoJogador.x;
+
+        dados.posicaoSalvaY =
+            posicaoJogador.y;
+
+        dados.posicaoSalvaZ =
+            posicaoJogador.z;
+
+        // Guarda as moedas atuais
+        dados.moedasSalvas =
+            NovoCoinManager.Instance.GetMoedas();
+
+        // Guarda as moedas que já foram coletadas
+        dados.moedasColetadasSalvas =
+            NovoCoinManager.Instance
+            .GetMoedasColetadas();
+
+        dados.faseConcluida = false;
+
+        return dados;
     }
 
     // ==========================================
-    // GETTERS
+    // GETTERS DO CHECKPOINT
     // ==========================================
 
     public bool CheckpointAtivado()
@@ -151,16 +247,23 @@ public class NovoCheckpointManager : MonoBehaviour
     }
 
     // ==========================================
-    // RESTAURAR MOEDAS
+    // RESTAURAR MOEDAS DO CHECKPOINT
     // ==========================================
 
     public void RestaurarMoedasDoCheckpoint()
     {
+        if (NovoCoinManager.Instance == null)
+            return;
+
         NovoCoinManager.Instance
             .RestaurarMoedasPorNome(
                 GetNomesMoedasCheckpoint()
             );
     }
+
+    // ==========================================
+    // NOMES DAS MOEDAS DO CHECKPOINT
+    // ==========================================
 
     private List<string> GetNomesMoedasCheckpoint()
     {
@@ -169,7 +272,8 @@ public class NovoCheckpointManager : MonoBehaviour
 
         foreach (
             NovaMoeda moeda
-            in moedasColetadasCheckpoint)
+            in moedasColetadasCheckpoint
+        )
         {
             if (moeda != null)
             {
@@ -190,7 +294,8 @@ public class NovoCheckpointManager : MonoBehaviour
         bool ativado,
         Vector3 posicao,
         int moedas,
-        List<string> moedasColetadas)
+        List<string> moedasColetadas
+    )
     {
         checkpointAtivado =
             ativado;
@@ -203,18 +308,25 @@ public class NovoCheckpointManager : MonoBehaviour
 
         moedasColetadasCheckpoint.Clear();
 
+        if (moedasColetadas == null)
+            moedasColetadas =
+                new List<string>();
+
         NovaMoeda[] todasAsMoedas =
             FindObjectsByType<NovaMoeda>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None
+                FindObjectsInactive.Include
             );
 
         foreach (
             NovaMoeda moeda
-            in todasAsMoedas)
+            in todasAsMoedas
+        )
         {
-            if (moedasColetadas.Contains(
-                moeda.GetID()))
+            if (
+                moedasColetadas.Contains(
+                    moeda.GetID()
+                )
+            )
             {
                 moedasColetadasCheckpoint.Add(
                     moeda

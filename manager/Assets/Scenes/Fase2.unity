@@ -425,12 +425,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d330a57f0573544eb658c936dd9320a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NovaZonaVitoria
-  painelVitoria: {fileID: 0}
-  textoVitoria: {fileID: 0}
-  textoContinuar: {fileID: 0}
+  painelVitoria: {fileID: 1423798777}
+  textoVitoria: {fileID: 1913972557}
+  textoContinuar: {fileID: 1750717498}
   proximaFase: Fase2
-  ultimaFase: 0
-  painelFinal: {fileID: 0}
+  ultimaFase: 1
+  painelFinal: {fileID: 172817298}
   textoMoedasFinal: {fileID: 0}
 --- !u!65 &103024356
 BoxCollider:
@@ -4248,7 +4248,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1332758463}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1989291689}
+        m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
+        m_MethodName: AbrirCarregarJogo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1332758463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6685,6 +6697,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1928945302}
   m_CullTransparentMesh: 1
+--- !u!1 &1989291688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1989291690}
+  - component: {fileID: 1989291689}
+  m_Layer: 0
+  m_Name: PauseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1989291689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989291688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d608336ecd40a194daef3fa5957c62ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PauseManager
+  painelPausa: {fileID: 552133623}
+--- !u!4 &1989291690
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989291688}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.66992, y: 0, z: -2.50907}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2067367317
 GameObject:
   m_ObjectHideFlags: 0
@@ -6852,7 +6909,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbdf32ba52792ce4d83dabd43af2b23b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NovoPlayerRespawn
-  pontoInicial: {fileID: 0}
+  pontoInicial: {fileID: 692673468}
 --- !u!114 &2068292835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7256,3 +7313,4 @@ SceneRoots:
   - {fileID: 1055835260}
   - {fileID: 699405463}
   - {fileID: 103024359}
+  - {fileID: 1989291690}

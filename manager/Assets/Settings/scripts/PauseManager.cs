@@ -11,6 +11,7 @@ public class PauseManager : MonoBehaviour
     private void Start()
     {
         painelPausa.SetActive(false);
+
         Time.timeScale = 1f;
     }
 
@@ -37,6 +38,10 @@ public class PauseManager : MonoBehaviour
         }
     }
 
+    // ==========================================
+    // PAUSAR
+    // ==========================================
+
     public void Pausar()
     {
         pausado = true;
@@ -47,6 +52,10 @@ public class PauseManager : MonoBehaviour
 
         Debug.Log("Jogo pausado.");
     }
+
+    // ==========================================
+    // CONTINUAR
+    // ==========================================
 
     public void Continuar()
     {
@@ -60,6 +69,24 @@ public class PauseManager : MonoBehaviour
     }
 
     // ==========================================
+    // CARREGAR JOGO
+    // ==========================================
+
+    public void AbrirCarregarJogo()
+    {
+        // Despausa antes de trocar de cena
+        Time.timeScale = 1f;
+
+        Debug.Log(
+            "Abrindo tela de Carregar Jogo..."
+        );
+
+        SceneManager.LoadScene(
+            "CarregarJogo"
+        );
+    }
+
+    // ==========================================
     // VOLTAR AO MENU
     // ==========================================
 
@@ -67,8 +94,14 @@ public class PauseManager : MonoBehaviour
     {
         Time.timeScale = 1f;
 
-        SceneManager.LoadScene("MenuPrincipal");
+        SceneManager.LoadScene(
+            "MenuPrincipal"
+        );
     }
+
+    // ==========================================
+    // GARANTIR QUE O TEMPO VOLTE
+    // ==========================================
 
     private void OnDestroy()
     {
