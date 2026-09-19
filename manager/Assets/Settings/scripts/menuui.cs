@@ -26,18 +26,11 @@ public class MainMenuUI : MonoBehaviour
 
     // ==========================================
     // COMEÇAR NOVA PARTIDA
+    // NÃO APAGA NENHUM SAVE
     // ==========================================
 
     public void StartPlatformGame()
     {
-        // Apaga todos os saves anteriores
-        if (SaveManager.Instance != null)
-        {
-            SaveManager.Instance
-                .ApagarTodosOsSaves();
-        }
-
-        // Começa a Fase 1
         GameManager.Instance.LoadScene(
             "Fase1"
         );

@@ -50,27 +50,28 @@ public class NovoCheckpointManager : MonoBehaviour
         {
             if (moeda.EstaColetada())
             {
-                moedasColetadasCheckpoint.Add(
-                    moeda
-                );
+                moedasColetadasCheckpoint.Add(moeda);
             }
         }
 
         checkpointAtivado = true;
 
-        // O checkpoint também cria um AUTOSAVE.
-        SaveData dados =
-            CriarDadosDoCheckpoint();
+        // ======================================
+        // AUTOSAVE NO SLOT 0
+        // ======================================
 
         if (SaveManager.Instance != null)
         {
+            SaveData dados =
+                CriarDadosDoSave();
+
             SaveManager.Instance.Salvar(
                 dados,
                 0
             );
 
             Debug.Log(
-                "Autosave do checkpoint realizado!"
+                "Autosave realizado no checkpoint!"
             );
         }
         else
@@ -91,10 +92,10 @@ public class NovoCheckpointManager : MonoBehaviour
     }
 
     // ==========================================
-    // CRIAR SAVE DO CHECKPOINT
+    // CRIAR DADOS DO SAVE
     // ==========================================
 
-    private SaveData CriarDadosDoCheckpoint()
+    public SaveData CriarDadosDoSave()
     {
         SaveData dados =
             new SaveData();
@@ -105,7 +106,31 @@ public class NovoCheckpointManager : MonoBehaviour
             .name;
 
         dados.checkpointAtivado =
-            true;
+            checkpointAtivado;
+
+        // ======================================
+        // SEM CHECKPOINT
+        // ======================================
+
+        if (!checkpointAtivado)
+        {
+            dados.checkpointX = 0f;
+            dados.checkpointY = 0f;
+            dados.checkpointZ = 0f;
+
+            dados.moedasCheckpoint = 0;
+
+            dados.moedasColetadasCheckpoint =
+                new List<string>();
+
+            dados.faseConcluida = false;
+
+            return dados;
+        }
+
+        // ======================================
+        // COM CHECKPOINT
+        // ======================================
 
         dados.checkpointX =
             posicaoCheckpoint.x;
@@ -122,113 +147,13 @@ public class NovoCheckpointManager : MonoBehaviour
         dados.moedasColetadasCheckpoint =
             GetNomesMoedasCheckpoint();
 
-        // O autosave do checkpoint também
-        // começa exatamente no checkpoint.
-        dados.possuiPosicaoSalva = true;
-
-        dados.posicaoSalvaX =
-            posicaoCheckpoint.x;
-
-        dados.posicaoSalvaY =
-            posicaoCheckpoint.y;
-
-        dados.posicaoSalvaZ =
-            posicaoCheckpoint.z;
-
-        dados.moedasSalvas =
-            moedasCheckpoint;
-
-        dados.moedasColetadasSalvas =
-            GetNomesMoedasCheckpoint();
-
         dados.faseConcluida = false;
 
         return dados;
     }
 
     // ==========================================
-    // CRIAR SAVE MANUAL
-    // ==========================================
-
-    public SaveData CriarDadosSaveManual(
-        Vector3 posicaoJogador
-    )
-    {
-        SaveData dados =
-            new SaveData();
-
-        dados.fase =
-            SceneManager
-            .GetActiveScene()
-            .name;
-
-        // ======================================
-        // MANTER CHECKPOINT
-        // ======================================
-
-        dados.checkpointAtivado =
-            checkpointAtivado;
-
-        if (checkpointAtivado)
-        {
-            dados.checkpointX =
-                posicaoCheckpoint.x;
-
-            dados.checkpointY =
-                posicaoCheckpoint.y;
-
-            dados.checkpointZ =
-                posicaoCheckpoint.z;
-
-            dados.moedasCheckpoint =
-                moedasCheckpoint;
-
-            dados.moedasColetadasCheckpoint =
-                GetNomesMoedasCheckpoint();
-        }
-        else
-        {
-            dados.checkpointX = 0f;
-            dados.checkpointY = 0f;
-            dados.checkpointZ = 0f;
-
-            dados.moedasCheckpoint = 0;
-
-            dados.moedasColetadasCheckpoint =
-                new List<string>();
-        }
-
-        // ======================================
-        // POSIÇÃO EXATA DO SAVE MANUAL
-        // ======================================
-
-        dados.possuiPosicaoSalva = true;
-
-        dados.posicaoSalvaX =
-            posicaoJogador.x;
-
-        dados.posicaoSalvaY =
-            posicaoJogador.y;
-
-        dados.posicaoSalvaZ =
-            posicaoJogador.z;
-
-        // Guarda as moedas atuais
-        dados.moedasSalvas =
-            NovoCoinManager.Instance.GetMoedas();
-
-        // Guarda as moedas que já foram coletadas
-        dados.moedasColetadasSalvas =
-            NovoCoinManager.Instance
-            .GetMoedasColetadas();
-
-        dados.faseConcluida = false;
-
-        return dados;
-    }
-
-    // ==========================================
-    // GETTERS DO CHECKPOINT
+    // GETTERS
     // ==========================================
 
     public bool CheckpointAtivado()
@@ -247,7 +172,7 @@ public class NovoCheckpointManager : MonoBehaviour
     }
 
     // ==========================================
-    // RESTAURAR MOEDAS DO CHECKPOINT
+    // RESTAURAR MOEDAS
     // ==========================================
 
     public void RestaurarMoedasDoCheckpoint()
@@ -262,7 +187,7 @@ public class NovoCheckpointManager : MonoBehaviour
     }
 
     // ==========================================
-    // NOMES DAS MOEDAS DO CHECKPOINT
+    // NOMES DAS MOEDAS
     // ==========================================
 
     private List<string> GetNomesMoedasCheckpoint()
@@ -309,8 +234,10 @@ public class NovoCheckpointManager : MonoBehaviour
         moedasColetadasCheckpoint.Clear();
 
         if (moedasColetadas == null)
+        {
             moedasColetadas =
                 new List<string>();
+        }
 
         NovaMoeda[] todasAsMoedas =
             FindObjectsByType<NovaMoeda>(

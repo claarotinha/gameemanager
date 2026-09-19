@@ -12,18 +12,10 @@ public class NovoPlayerRespawn : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    // ==========================================
-    // MORRER
-    // ==========================================
-
     public void Morrer()
     {
         Respawn();
     }
-
-    // ==========================================
-    // RESPAWN
-    // ==========================================
 
     private void Respawn()
     {
@@ -36,9 +28,9 @@ public class NovoPlayerRespawn : MonoBehaviour
             return;
         }
 
-        // ======================================
-        // TEM CHECKPOINT?
-        // ======================================
+        // ==========================================
+        // COM CHECKPOINT
+        // ==========================================
 
         if (
             NovoCheckpointManager.Instance != null &&
@@ -48,7 +40,7 @@ public class NovoPlayerRespawn : MonoBehaviour
         {
             Vector3 posicaoRespawn =
                 NovoCheckpointManager.Instance
-                .GetPosicaoCheckpoint();
+                    .GetPosicaoCheckpoint();
 
             rb.linearVelocity =
                 Vector3.zero;
@@ -59,13 +51,12 @@ public class NovoPlayerRespawn : MonoBehaviour
             rb.position =
                 posicaoRespawn;
 
-            // Volta às moedas do checkpoint
             if (NovoCoinManager.Instance != null)
             {
                 NovoCoinManager.Instance
                     .DefinirMoedas(
                         NovoCheckpointManager.Instance
-                        .GetMoedasCheckpoint()
+                            .GetMoedasCheckpoint()
                     );
 
                 NovoCheckpointManager.Instance
@@ -73,15 +64,16 @@ public class NovoPlayerRespawn : MonoBehaviour
             }
 
             Debug.Log(
-                "Morreu: voltando ao checkpoint."
+                "Morreu: voltou para o checkpoint."
             );
         }
+
+        // ==========================================
+        // SEM CHECKPOINT
+        // ==========================================
+
         else
         {
-            // ==================================
-            // SEM CHECKPOINT
-            // ==================================
-
             if (pontoInicial == null)
             {
                 Debug.LogError(
@@ -100,9 +92,6 @@ public class NovoPlayerRespawn : MonoBehaviour
             rb.position =
                 pontoInicial.position;
 
-            // IMPORTANTE:
-            // Sem checkpoint, as moedas voltam
-            // para 0.
             if (NovoCoinManager.Instance != null)
             {
                 NovoCoinManager.Instance
@@ -117,7 +106,7 @@ public class NovoPlayerRespawn : MonoBehaviour
             );
 
             Debug.Log(
-                "Voltando ao início com 0 moedas."
+                "Voltou ao início com 0 moedas."
             );
         }
     }

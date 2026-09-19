@@ -12,7 +12,6 @@ public class SaveData
 
     // ==========================================
     // CHECKPOINT
-    // Usado para RESPawn depois da morte
     // ==========================================
 
     public bool checkpointAtivado;
@@ -24,22 +23,6 @@ public class SaveData
     public int moedasCheckpoint;
 
     public List<string> moedasColetadasCheckpoint =
-        new List<string>();
-
-    // ==========================================
-    // SAVE MANUAL
-    // Guarda o local EXATO onde o jogador salvou
-    // ==========================================
-
-    public bool possuiPosicaoSalva;
-
-    public float posicaoSalvaX;
-    public float posicaoSalvaY;
-    public float posicaoSalvaZ;
-
-    public int moedasSalvas;
-
-    public List<string> moedasColetadasSalvas =
         new List<string>();
 
     // ==========================================

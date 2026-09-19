@@ -85,18 +85,13 @@ public class SaveManager : MonoBehaviour
         );
 
         Debug.Log(
-            "Posição salva: " +
-            dados.possuiPosicaoSalva
-        );
-
-        Debug.Log(
             "Checkpoint: " +
             dados.checkpointAtivado
         );
 
         Debug.Log(
-            "Moedas salvas: " +
-            dados.moedasSalvas
+            "Moedas do checkpoint: " +
+            dados.moedasCheckpoint
         );
     }
 
@@ -121,8 +116,7 @@ public class SaveManager : MonoBehaviour
         }
 
         if (
-            NovoCheckpointManager.Instance
-            == null
+            NovoCheckpointManager.Instance == null
         )
         {
             Debug.LogError(
@@ -132,30 +126,16 @@ public class SaveManager : MonoBehaviour
             return;
         }
 
-        GameObject player =
-            GameObject.FindGameObjectWithTag(
-                "Player"
-            );
+        // ======================================
+        // IMPORTANTE:
+        // NÃO salva a posição atual.
+        //
+        // Salva somente o checkpoint.
+        // ======================================
 
-        if (player == null)
-        {
-            Debug.LogError(
-                "Player não encontrado!"
-            );
-
-            return;
-        }
-
-        // Pega a posição EXATA do Player
-        Vector3 posicaoJogador =
-            player.transform.position;
-
-        // Cria o save manual
         SaveData dados =
             NovoCheckpointManager.Instance
-            .CriarDadosSaveManual(
-                posicaoJogador
-            );
+                .CriarDadosDoSave();
 
         // Salva no slot escolhido
         Salvar(
@@ -163,7 +143,7 @@ public class SaveManager : MonoBehaviour
             slot
         );
 
-        // Também copia para Slot 0
+        // Também copia para o Slot 0
         Salvar(
             dados,
             0
@@ -183,18 +163,13 @@ public class SaveManager : MonoBehaviour
         );
 
         Debug.Log(
-            "Posição: " +
-            posicaoJogador
-        );
-
-        Debug.Log(
-            "Moedas: " +
-            dados.moedasSalvas
-        );
-
-        Debug.Log(
             "Checkpoint: " +
             dados.checkpointAtivado
+        );
+
+        Debug.Log(
+            "Moedas do checkpoint: " +
+            dados.moedasCheckpoint
         );
 
         Debug.Log(
@@ -237,7 +212,6 @@ public class SaveManager : MonoBehaviour
             return;
         }
 
-        // Se estava pausado
         Time.timeScale = 1f;
 
         string textoCriptografado =
@@ -279,20 +253,13 @@ public class SaveManager : MonoBehaviour
         );
 
         Debug.Log(
-            "Posição salva: " +
-            dadosCarregados.possuiPosicaoSalva
-        );
-
-        Debug.Log(
-            "Moedas salvas: " +
-            dadosCarregados.moedasSalvas
-        );
-
-        Debug.Log(
             "================================"
         );
 
-        // Copia save manual para Slot 0
+        // ======================================
+        // SLOT MANUAL → SLOT 0
+        // ======================================
+
         if (slot != 0)
         {
             Salvar(
@@ -301,7 +268,10 @@ public class SaveManager : MonoBehaviour
             );
         }
 
-        // Força o carregamento da fase
+        // ======================================
+        // FORÇA CARREGAMENTO DA FASE
+        // ======================================
+
         SceneManager.LoadScene(
             dadosCarregados.fase,
             LoadSceneMode.Single
@@ -317,9 +287,7 @@ public class SaveManager : MonoBehaviour
         LoadSceneMode modo
     )
     {
-        if (
-            dadosCarregados == null
-        )
+        if (dadosCarregados == null)
             return;
 
         if (
@@ -327,10 +295,6 @@ public class SaveManager : MonoBehaviour
             dadosCarregados.fase
         )
             return;
-
-        Debug.Log(
-            "Cena carregada. Aplicando save..."
-        );
 
         AplicarDados();
 
@@ -343,13 +307,11 @@ public class SaveManager : MonoBehaviour
 
     private void AplicarDados()
     {
-        if (
-            dadosCarregados == null
-        )
+        if (dadosCarregados == null)
             return;
 
         // ======================================
-        // MOEDAS DO SAVE MANUAL
+        // MOEDAS
         // ======================================
 
         if (
@@ -359,18 +321,18 @@ public class SaveManager : MonoBehaviour
             NovoCoinManager.Instance
                 .DefinirMoedas(
                     dadosCarregados
-                    .moedasSalvas
+                        .moedasCheckpoint
                 );
 
             NovoCoinManager.Instance
                 .RestaurarMoedasPorNome(
                     dadosCarregados
-                    .moedasColetadasSalvas
+                        .moedasColetadasCheckpoint
                 );
         }
 
         // ======================================
-        // RESTAURAR CHECKPOINT
+        // CHECKPOINT
         // ======================================
 
         if (
@@ -378,7 +340,7 @@ public class SaveManager : MonoBehaviour
             != null
         )
         {
-            Vector3 checkpoint =
+            Vector3 posicaoCheckpoint =
                 new Vector3(
                     dadosCarregados.checkpointX,
                     dadosCarregados.checkpointY,
@@ -388,15 +350,15 @@ public class SaveManager : MonoBehaviour
             NovoCheckpointManager.Instance
                 .CarregarCheckpoint(
                     dadosCarregados
-                    .checkpointAtivado,
+                        .checkpointAtivado,
 
-                    checkpoint,
-
-                    dadosCarregados
-                    .moedasCheckpoint,
+                    posicaoCheckpoint,
 
                     dadosCarregados
-                    .moedasColetadasCheckpoint
+                        .moedasCheckpoint,
+
+                    dadosCarregados
+                        .moedasColetadasCheckpoint
                 );
         }
 
@@ -418,105 +380,74 @@ public class SaveManager : MonoBehaviour
             return;
         }
 
-        Vector3 posicaoPlayer;
+        Rigidbody rb =
+            player.GetComponent<Rigidbody>();
 
         // ======================================
-        // 1º: POSIÇÃO DO SAVE MANUAL
+        // COM CHECKPOINT
         // ======================================
 
         if (
             dadosCarregados
-            .possuiPosicaoSalva
+                .checkpointAtivado
         )
         {
-            posicaoPlayer =
+            Vector3 posicao =
                 new Vector3(
-                    dadosCarregados
-                    .posicaoSalvaX,
-
-                    dadosCarregados
-                    .posicaoSalvaY,
-
-                    dadosCarregados
-                    .posicaoSalvaZ
+                    dadosCarregados.checkpointX,
+                    dadosCarregados.checkpointY,
+                    dadosCarregados.checkpointZ
                 );
 
+            if (rb != null)
+            {
+                rb.linearVelocity =
+                    Vector3.zero;
+
+                rb.angularVelocity =
+                    Vector3.zero;
+
+                rb.position =
+                    posicao;
+            }
+            else
+            {
+                player.transform.position =
+                    posicao;
+            }
+
             Debug.Log(
-                "Usando posição EXATA do save manual."
+                "Player carregado no CHECKPOINT."
             );
         }
 
         // ======================================
-        // 2º: CHECKPOINT
-        // ======================================
-
-        else if (
-            dadosCarregados
-            .checkpointAtivado
-        )
-        {
-            posicaoPlayer =
-                new Vector3(
-                    dadosCarregados
-                    .checkpointX,
-
-                    dadosCarregados
-                    .checkpointY,
-
-                    dadosCarregados
-                    .checkpointZ
-                );
-
-            Debug.Log(
-                "Usando posição do checkpoint."
-            );
-        }
-
-        // ======================================
-        // 3º: PONTO INICIAL
+        // SEM CHECKPOINT
         // ======================================
 
         else
         {
+            // Não colocamos uma posição manual.
+            // O Player começa normalmente no
+            // PontoInicial da cena.
+
+            if (NovoCoinManager.Instance != null)
+            {
+                NovoCoinManager.Instance
+                    .DefinirMoedas(0);
+
+                NovoCoinManager.Instance
+                    .RestaurarTodasAsMoedas();
+            }
+
             Debug.Log(
-                "Sem posição salva e sem checkpoint."
+                "Save sem checkpoint."
             );
 
             Debug.Log(
-                "Player começará no PontoInicial."
+                "Player começará no início da fase."
             );
-
-            return;
         }
-
-        // ======================================
-        // COLOCAR PLAYER
-        // ======================================
-
-        Rigidbody rb =
-            player.GetComponent<Rigidbody>();
-
-        if (rb != null)
-        {
-            rb.linearVelocity =
-                Vector3.zero;
-
-            rb.angularVelocity =
-                Vector3.zero;
-
-            rb.position =
-                posicaoPlayer;
-        }
-        else
-        {
-            player.transform.position =
-                posicaoPlayer;
-        }
-
-        Debug.Log(
-            "Player colocado em: " +
-            posicaoPlayer
-        );
 
         Debug.Log(
             "Save aplicado com sucesso!"
@@ -524,41 +455,7 @@ public class SaveManager : MonoBehaviour
     }
 
     // ==========================================
-    // APAGAR SAVES
-    // ==========================================
-
-    public void ApagarTodosOsSaves()
-    {
-        for (
-            int slot = 0;
-            slot <= 3;
-            slot++
-        )
-        {
-            string caminho =
-                ObterCaminho(slot);
-
-            if (File.Exists(caminho))
-            {
-                File.Delete(
-                    caminho
-                );
-
-                Debug.Log(
-                    "Save do Slot " +
-                    slot +
-                    " apagado."
-                );
-            }
-        }
-
-        Debug.Log(
-            "Todos os saves foram apagados!"
-        );
-    }
-
-    // ==========================================
-    // CAMINHO
+    // CAMINHO DO SAVE
     // ==========================================
 
     private string ObterCaminho(
@@ -643,15 +540,13 @@ public class SaveManager : MonoBehaviour
 
             byte[] dados =
                 System.Convert
-                .FromBase64String(
-                    texto
-                );
+                    .FromBase64String(
+                        texto
+                    );
 
             using (
                 MemoryStream memoria =
-                new MemoryStream(
-                    dados
-                )
+                new MemoryStream(dados)
             )
             {
                 using (
@@ -678,7 +573,7 @@ public class SaveManager : MonoBehaviour
     }
 
     // ==========================================
-    // CHAVE
+    // GERAR CHAVE
     // ==========================================
 
     private byte[] GerarChave()
